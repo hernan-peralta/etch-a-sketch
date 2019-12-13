@@ -1,0 +1,38 @@
+html{
+    background-image: url(../images/pencils.jpg); 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+h1{
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 5em;
+}
+
+#panel{
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+.container{
+    width: 960px;
+    height: 700px;
+    display: flex;
+    margin: auto;
+    flex-grow: 1;
+    background-color: white;
+}
+
+.row{
+    flex-grow: 1;
+}
+
+.cell{
+    flex: 2;
+    border: 1px black solid;
+}
