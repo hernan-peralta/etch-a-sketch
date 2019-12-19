@@ -2,9 +2,12 @@ let $container = document.querySelector(".container");
 const $newCanvas = document.querySelector("#new-canvas");
 const $resetCanvas = document.querySelector("#reset-canvas");
 const $randomColor = document.querySelector("#random-color");
+const $darken = document.querySelector("#darken");
 let $cells = document.querySelectorAll(".cell");
 let $isRandom = document.querySelector("#is-random");
 let randomActivated = false;
+let $isDarken = document.querySelector("#is-darken");
+let darkenActivated = false;
 
 
 
@@ -22,18 +25,26 @@ function drawCanvas(squares){
 
 
 function resetCanvas(){
-    $cells.forEach(cell => cell.style.backgroundColor = 'white');
+    for(let i=0; i<$cells.length; i++){
+        $cells[i].style.backgroundColor = 'white';
+        $cells[i].style.filter = "";
+    }
 }
 
 
 function paint(){
     $cells = document.querySelectorAll(".cell");
-    if (randomActivated === false){
-        $cells.forEach(cell => cell.addEventListener('mouseover', function(){userSelectedColor(cell)}));
-    }
-
+    
     if (randomActivated === true){
         $cells.forEach(cell => cell.addEventListener('mouseover', function(){randomColor(cell)}));
+    }
+    
+    if (darkenActivated === true){
+        $cells.forEach(cell => cell.addEventListener('mouseover', function(){darken(cell)}));
+    }
+
+    else {
+        $cells.forEach(cell => cell.addEventListener('mouseover', function(){userSelectedColor(cell)}));
     }
 }
 
@@ -47,6 +58,28 @@ function userSelectedColor(cell){
 function randomColor(cell){
     let randomizedColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);}) // https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
     cell.style.backgroundColor = randomizedColor;
+}
+
+
+function darken(cell){
+    if (cell.style.filter.includes("brightness")===false){
+        cell.style.filter = "brightness(90%)";
+    }
+
+    if (cell.style.filter.includes("brightness(0%)")){
+        return "";
+    }
+
+    // if (cell.style.filter.includes("brightness(100%)")){
+    //     return "";
+    // }
+
+    else{
+        let brightness = cell.style.filter.slice(11, 13);
+        brightness = Number(brightness)-10;
+        cell.style.filter = "brightness(" + brightness + "%)";
+        console.log(cell.style.filter);
+    }
 }
 
 
@@ -64,8 +97,15 @@ function newCanvas(){
 
 $newCanvas.onclick = newCanvas;
 $resetCanvas.onclick = resetCanvas;
+
 $randomColor.onclick = function(){
-    randomActivated = !randomActivated
+    randomActivated = !randomActivated;
     $isRandom.innerText = 'Random color activated: ' + `${randomActivated}`;
     return paint()
+};
+
+$darken.onclick = function(){
+    darkenActivated = !darkenActivated;
+    $isDarken.innerText = 'Darken activated: ' + `${darkenActivated}`;
+    return paint();
 };
