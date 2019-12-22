@@ -24,6 +24,7 @@ function drawCanvas(squares){
 
 
 function resetCanvas() {
+    $cells = document.querySelectorAll(".cell");
     for (let i = 0; i < $cells.length; i++) {
         $cells[i].style.backgroundColor = "white";
         $cells[i].style.filter = "";
@@ -31,18 +32,11 @@ function resetCanvas() {
 }
 
 
-function paint() {
-    $cells = document.querySelectorAll(".cell")
-
-    $cells.forEach(cell =>cell.addEventListener("mouseover", function(){handlePaint(cell)}));
-}
-
-
-function handlePaint(cell) {
+function paint(cell) {
     if (randomActivated === true){
         randomColor(cell);
     } 
-    if (darkenActivated === true){
+    else if (darkenActivated === true){
         darken(cell);
     } 
     else {
@@ -75,9 +69,6 @@ function darken(cell){
         return "";
     }
 
-  // if (cell.style.filter.includes("brightness(100%)")){
-  //     return "";
-  // }
     else{
         let brightness = cell.style.filter.slice(11, 13);
         brightness = Number(brightness) - 10;
@@ -97,7 +88,7 @@ function newCanvas(){
       .querySelectorAll(".cell")
       .forEach(cell => cell.setAttribute("style", "height:" + height + "px;"))
 
-    paint();
+    resetCanvas();
 }
 
 
@@ -107,11 +98,14 @@ $resetCanvas.onclick = resetCanvas;
 $randomColor.onclick = function (){
     randomActivated = !randomActivated;
     $isRandom.innerText = "Random color activated: " + `${randomActivated}`;
-    return paint();
 }
 
 $darken.onclick = function () {
     darkenActivated = !darkenActivated;
     $isDarken.innerText = "Darken activated: " + `${darkenActivated}`;
-    return paint();
+}
+
+$container.onmouseover = function(event){
+    let cell = event.target.closest('.cell');
+    paint(cell);
 }
